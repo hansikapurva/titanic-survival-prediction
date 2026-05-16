@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanic Survival Prediction</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">🚢 Titanic Survival</div>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#predict">Predict</a></li>
+            <li><a href="#analysis">Analysis</a></li>
+            <li><a href="#model">Model</a></li>
+            <li><a href="#batch">Batch Test</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="hero">
+
+        <div class="hero-content">
+
+            <h3>NITTE University</h3>
+
+            <p class="tagline">
+                Machine Learning · Random Forest · XGBoost
+            </p>
+
+            <h1>
+                Would you have <br>
+                survived the Titanic?
+            </h1>
+
+            <p class="description">
+                A machine learning project that predicts Titanic passenger survival
+                using Random Forest & XGBoost.
+                Trained on real historical data with feature engineering,
+                EDA, and model evaluation.
+            </p>
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <h2>80%</h2>
+                    <p>Model accuracy</p>
+                </div>
+
+                <div class="stat-card">
+                    <h2>891</h2>
+                    <p>Passengers</p>
+                </div>
+
+                <div class="stat-card">
+                    <h2>11</h2>
+                    <p>Features used</p>
+                </div>
+
+            </div>
+
+            <div class="hero-buttons">
+                <a href="#predict" class="btn">Try prediction →</a>
+                <a href="#analysis" class="btn secondary">View analysis</a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+
+        <h2>Project Team</h2>
+
+        <div class="team-container">
+
+            <div class="team-card">
+                <h3>1NT23CB016</h3>
+                <p>Hansika Purva</p>
+            </div>
+
+            <div class="team-card">
+                <h3>1NT23CB020</h3>
+                <p>Inaya Firdous</p>
+            </div>
+
+            <div class="team-card">
+                <h3>1NT23CB035</h3>
+                <p>Nandini</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Prediction Section -->
+    <section id="predict" class="predict-section">
+
+        <h2>🔮 Interactive Survival Prediction</h2>
+
+        <p>
+            Enter passenger details and our Random Forest model
+            will predict your chances of survival.
+        </p>
+
+        <div class="prediction-form">
+
+            <div class="form-group">
+                <label>Passenger class</label>
+
+                <select id="pclass">
+                    <option value="1">1st Class – Luxury</option>
+                    <option value="2">2nd Class – Middle</option>
+                    <option value="3" selected>3rd Class – Economy</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+
+                <select id="sex">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="age" value="28">
+            </div>
+
+            <div class="form-group">
+                <label>Fare paid (£)</label>
+                <input type="number" id="fare" value="15">
+            </div>
+
+            <div class="form-group">
+                <label>Siblings / Spouses aboard</label>
+                <input type="number" id="sibsp" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Parents / Children aboard</label>
+                <input type="number" id="parch" value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Port of embarkation</label>
+
+                <select id="embarked">
+                    <option value="S">Southampton (England)</option>
+                    <option value="C">Cherbourg (France)</option>
+                    <option value="Q">Queenstown (Ireland)</option>
+                </select>
+            </div>
+
+            <button class="predict-btn" onclick="predictSurvival()">
+                Predict my survival →
+            </button>
+
+        </div>
+
+        <div id="prediction-result" class="prediction-result">
+            ⚓ Fill in the details and click predict to see your result
+        </div>
+
+    </section>
+
+    <!-- Analysis Section -->
+    <section id="analysis" class="analysis-section">
+
+        <h2>📊 Exploratory Data Analysis</h2>
+
+        <p>
+            Visual insights from the Titanic dataset — gender,
+            class, age, and how they shaped survival.
+        </p>
+
+        <div class="analysis-stats">
+
+            <div class="analysis-card">
+                <h3>891</h3>
+                <p>Total passengers</p>
+            </div>
+
+            <div class="analysis-card">
+                <h3>38.4%</h3>
+                <p>Survival rate</p>
+            </div>
+
+            <div class="analysis-card">
+                <h3>74%</h3>
+                <p>Female survival</p>
+            </div>
+
+        </div>
+
+        <div class="charts-container">
+
+            <div class="chart-card">
+                <h3>Survival distribution</h3>
+                <canvas id="survivalChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Survival by gender</h3>
+                <canvas id="genderChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Survival by passenger class</h3>
+                <canvas id="classChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Age distribution</h3>
+                <canvas id="ageChart"></canvas>
+            </div>
+
+        </div>
+
+        <div class="insights">
+
+            <div class="insight-card">
+                <h3>👩 Women first</h3>
+
+                <p>
+                    Female passengers survived at ~74% vs ~19% for males.
+                </p>
+            </div>
+
+            <div class="insight-card">
+                <h3>🎩 Class mattered</h3>
+
+                <p>
+                    1st class passengers had much better survival odds.
+                </p>
+            </div>
+
+            <div class="insight-card">
+                <h3>👶 Children survived more</h3>
+
+                <p>
+                    Passengers under 16 had better survival rates.
+                </p>
+            </div>
+
+            <div class="insight-card">
+                <h3>👨‍👩‍👧 Family size helped</h3>
+
+                <p>
+                    Small families had better survival chances.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Model Section -->
+    <section id="model" class="model-section">
+
+        <h2>🤖 Model Evaluation</h2>
+
+        <p>
+            Comparing XGBoost and Random Forest metrics.
+        </p>
+
+        <div class="model-cards">
+
+            <div class="model-card">
+                <h3>80%</h3>
+                <p>Random Forest accuracy</p>
+            </div>
+
+            <div class="model-card">
+                <h3>82.4%</h3>
+                <p>XGBoost accuracy</p>
+            </div>
+
+            <div class="model-card">
+                <h3>78%</h3>
+                <p>Precision</p>
+            </div>
+
+            <div class="model-card">
+                <h3>75%</h3>
+                <p>Recall</p>
+            </div>
+
+        </div>
+
+        <div class="charts-container">
+
+            <div class="chart-card">
+                <h3>Confusion matrix</h3>
+                <canvas id="confusionChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Feature importance</h3>
+                <canvas id="featureChart"></canvas>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Batch Section -->
+    <section id="batch" class="batch-section">
+
+        <h2>📋 Batch Testing</h2>
+
+        <p>
+            Paste JSON passenger data or test sample passengers.
+        </p>
+
+        <textarea id="batchInput" rows="10">
+[
+  {
+    "Pclass": 1,
+    "Sex": "female",
+    "Age": 38,
+    "SibSp": 1,
+    "Parch": 0,
+    "Fare": 71.28,
+    "Embarked": "C"
+  }
+]
+        </textarea>
+
+        <div class="batch-buttons">
+            <button onclick="batchPredict()">Batch predict</button>
+            <button onclick="clearBatch()">Clear results</button>
+        </div>
+
+        <div id="batchResults" class="batch-results">
+            Results will appear here after running a prediction.
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+
+        <h3>🚢 Titanic Survival Prediction</h3>
+
+        <p>
+            A machine learning project by Hansika Purva,
+            Inaya Firdous & Nandini · NITTE University · 2024
+        </p>
+
+        <p>
+            Built with Flask · Random Forest · XGBoost · Chart.js
+        </p>
+
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
